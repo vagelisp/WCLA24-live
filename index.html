@@ -15,6 +15,8 @@
       border: none;
       width: 100%;
       height: 100%;
+      opacity: 1;
+      transition: opacity 1s ease-in-out; /* Fade effect */
     }
   </style>
 </head>
@@ -45,15 +47,22 @@
     let currentIndex = 0;
 
     function loadNextUrl() {
-      iframe.src = urls[currentIndex];
-      currentIndex++;
-      if (currentIndex >= urls.length) {
-        setTimeout(() => {
-          location.reload();
-        }, 15000);
-      } else {
-        setTimeout(loadNextUrl, 15000);
-      }
+      iframe.style.opacity = 0; // Start fade-out
+      setTimeout(() => {
+        iframe.src = urls[currentIndex];
+        currentIndex++;
+        iframe.onload = () => {
+          iframe.style.opacity = 1; // Fade-in after the new URL loads
+        };
+
+        if (currentIndex >= urls.length) {
+          setTimeout(() => {
+            location.reload();
+          }, 15000);
+        } else {
+          setTimeout(loadNextUrl, 15000);
+        }
+      }, 1000); // Wait for fade-out before changing the source
     }
 
     loadNextUrl();
