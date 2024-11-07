@@ -30,14 +30,47 @@
       transition: opacity 1s ease-in-out;
     }
 
-    #progressBar {
+    #progressBarContainer {
       position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .progressBar {
+      position: absolute;
+      background-color: #4b192d;
+      transition: width 15s linear, height 15s linear;
+    }
+
+    #progressTop {
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 5px;
+    }
+
+    #progressRight {
+      top: 0;
+      right: 0;
+      width: 5px;
+      height: 0;
+    }
+
+    #progressBottom {
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 5px;
+    }
+
+    #progressLeft {
       bottom: 0;
       left: 0;
-      height: 10px;
-      width: 0;
-      background-color: #4b192d;
-      transition: width linear;
+      width: 5px;
+      height: 0;
     }
   </style>
 </head>
@@ -46,7 +79,12 @@
 <div id="iframeWrapper">
   <iframe id="dynamicIframe"></iframe>
 </div>
-<div id="progressBar"></div>
+<div id="progressBarContainer">
+  <div id="progressTop" class="progressBar"></div>
+  <div id="progressRight" class="progressBar"></div>
+  <div id="progressBottom" class="progressBar"></div>
+  <div id="progressLeft" class="progressBar"></div>
+</div>
 
 <script>
   async function fetchUrls() {
@@ -68,8 +106,33 @@
     }
 
     const iframe = document.getElementById('dynamicIframe');
-    const progressBar = document.getElementById('progressBar');
+    const progressBars = {
+      top: document.getElementById('progressTop'),
+      right: document.getElementById('progressRight'),
+      bottom: document.getElementById('progressBottom'),
+      left: document.getElementById('progressLeft')
+    };
+
     let currentIndex = 0;
+
+    function resetProgressBars() {
+      progressBars.top.style.width = '0';
+      progressBars.right.style.height = '0';
+      progressBars.bottom.style.width = '0';
+      progressBars.left.style.height = '0';
+
+      setTimeout(() => {
+        progressBars.top.style.transition = 'width 15s linear';
+        progressBars.right.style.transition = 'height 15s linear';
+        progressBars.bottom.style.transition = 'width 15s linear';
+        progressBars.left.style.transition = 'height 15s linear';
+
+        progressBars.top.style.width = '100%';
+        progressBars.right.style.height = '100%';
+        progressBars.bottom.style.width = '100%';
+        progressBars.left.style.height = '100%';
+      }, 100);
+    }
 
     function loadNextUrl() {
       iframe.style.opacity = 0; // Start fade-out
@@ -80,13 +143,7 @@
           iframe.style.opacity = 1; // Fade-in after the new URL loads
         };
 
-        progressBar.style.transition = 'none'; // Reset progress bar
-        progressBar.style.width = '0';
-        
-        setTimeout(() => {
-          progressBar.style.transition = 'width 15s linear'; // Progress for 15s
-          progressBar.style.width = '100%';
-        }, 100); // Slight delay to ensure the transition is visible
+        resetProgressBars();
 
         if (currentIndex >= urls.length) {
           setTimeout(() => {
