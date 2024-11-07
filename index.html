@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordCamp Larissa 2024</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+<iframe id="dynamicIframe"></iframe>
+
+<script>
+  async function fetchUrls() {
+    try {
+      const response = await fetch('live-urls.json');
+      const data = await response.json();
+      return data.urls;
+    } catch (error) {
+      console.error('Error fetching URLs:', error);
+      return [];
+    }
+  }
+
+  async function startRotation() {
+    const urls = await fetchUrls();
+    if (urls.length === 0) {
+      console.error('No URLs to display.');
+      return;
+    }
+
+    const iframe = document.getElementById('dynamicIframe');
+    let currentIndex = 0;
+
+    function loadNextUrl() {
+      iframe.src = urls[currentIndex];
+      currentIndex++;
+      if (currentIndex >= urls.length) {
+        setTimeout(() => {
+          location.reload();
+        }, 15000);
+      } else {
+        setTimeout(loadNextUrl, 15000);
+      }
+    }
+
+    loadNextUrl();
+  }
+
+  startRotation();
+</script>
+
+</body>
+</html>
