@@ -91,5 +91,5 @@ This project is licensed under the GPL-3.0 License. See the [LICENSE](https://ww
 
 ## Acknowledgments
 
-- **WordCamp Larissa 2024 Team**: For organizing an amazing event!
+- [**WordCamp Larissa 2024 Team**](https://larissa.wordcamp.org/2024/organotiki-omada/): For organizing an amazing event!
 - **Special Thanks**: To all contributors and supporters.
