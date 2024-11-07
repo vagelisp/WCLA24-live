@@ -41,21 +41,21 @@
 
     .progressBar {
       position: absolute;
-      background-color: #4b192d;
-      transition: width 15s linear, height 15s linear;
+      background-color: #4b192d΄
+      transition: none;
     }
 
     #progressTop {
       top: 0;
       left: 0;
       width: 0;
-      height: 5px;
+      height: 10px;
     }
 
     #progressRight {
       top: 0;
       right: 0;
-      width: 5px;
+      width: 10px;
       height: 0;
     }
 
@@ -63,13 +63,13 @@
       bottom: 0;
       right: 0;
       width: 0;
-      height: 5px;
+      height: 10px;
     }
 
     #progressLeft {
       bottom: 0;
       left: 0;
-      width: 5px;
+      width: 10px;
       height: 0;
     }
   </style>
@@ -115,23 +115,31 @@
 
     let currentIndex = 0;
 
-    function resetProgressBars() {
-      progressBars.top.style.width = '0';
-      progressBars.right.style.height = '0';
-      progressBars.bottom.style.width = '0';
-      progressBars.left.style.height = '0';
+    function resetBars() {
+      for (const bar of Object.values(progressBars)) {
+        bar.style.transition = 'none';
+        bar.style.width = '0';
+        bar.style.height = '0';
+      }
+    }
 
-      setTimeout(() => {
-        progressBars.top.style.transition = 'width 15s linear';
-        progressBars.right.style.transition = 'height 15s linear';
-        progressBars.bottom.style.transition = 'width 15s linear';
-        progressBars.left.style.transition = 'height 15s linear';
+    function animateBar(bar, property, value, duration, callback) {
+      bar.style.transition = `${property} ${duration}s linear`;
+      bar.style[property] = value;
 
-        progressBars.top.style.width = '100%';
-        progressBars.right.style.height = '100%';
-        progressBars.bottom.style.width = '100%';
-        progressBars.left.style.height = '100%';
-      }, 100);
+      setTimeout(callback, duration * 1000);
+    }
+
+    function startProgressAnimation(callback) {
+      resetBars();
+
+      animateBar(progressBars.top, 'width', '100%', 3.75, () => {
+        animateBar(progressBars.right, 'height', '100%', 3.75, () => {
+          animateBar(progressBars.bottom, 'width', '100%', 3.75, () => {
+            animateBar(progressBars.left, 'height', '100%', 3.75, callback);
+          });
+        });
+      });
     }
 
     function loadNextUrl() {
@@ -143,15 +151,13 @@
           iframe.style.opacity = 1; // Fade-in after the new URL loads
         };
 
-        resetProgressBars();
-
-        if (currentIndex >= urls.length) {
-          setTimeout(() => {
+        startProgressAnimation(() => {
+          if (currentIndex >= urls.length) {
             location.reload();
-          }, 15000);
-        } else {
-          setTimeout(loadNextUrl, 15000);
-        }
+          } else {
+            loadNextUrl();
+          }
+        });
       }, 1000); // Wait for fade-out before changing the source
     }
 
