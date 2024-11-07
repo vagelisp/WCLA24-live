@@ -27,7 +27,7 @@
       top: -200px; /* Hide top 200px of iframe content */
       left: 0;
       width: 100%;
-      height: calc(100% + 400px); /* Extend height to cover both hidden parts (top + bottom) */
+      height: calc(100% + 400px); /* Extend height to cover both hidden parts (top + bottom). This ensures that any menus, cookie bars, or similar elements from the remote URLs are hidden from view in our version. */
       border: none;
       opacity: 1;
       transition: opacity 1s ease-in-out; /* Smooth fade effect for iframe transitions */
@@ -92,8 +92,8 @@
     let currentIndex = 0; // Track the current URL index
 
     // Define time constants for better readability
-    const FADE_DURATION = 1000; // 1 second for fade transitions
-    const INTERVAL = 15000; // 15 seconds per URL
+    const FADE_DURATION = 1500; // 1 second for fade transitions
+    const INTERVAL = 21500; // 15 seconds per URL
 
     /**
      * Resets and starts the progress bar animation for the current interval.
