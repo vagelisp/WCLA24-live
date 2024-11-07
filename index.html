@@ -76,12 +76,22 @@
 
 <script>
   /**
-   * Fetches the list of URLs from an external JSON file.
+   * Parses the query parameter to get the JSON file name.
+   * @returns {string} The JSON file path based on the query parameter or the default file.
+   */
+  function getJsonFile() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('file') || 'data/live-urls.json'; // Default file if no query param
+  }
+
+  /**
+   * Fetches the list of URLs from a dynamically determined JSON file.
    * @returns {Promise<string[]>} A promise that resolves to an array of URLs.
    */
   async function fetchUrls() {
+    const jsonFile = getJsonFile(); // Dynamically set the JSON file
     try {
-      const response = await fetch('data/live-urls.json'); // Fetch the JSON file
+      const response = await fetch(jsonFile); // Fetch the JSON file
       if (!response.ok) throw new Error('Failed to fetch URLs'); // Check response status
       const data = await response.json(); // Parse the JSON data
       if (!Array.isArray(data.urls) || data.urls.length === 0) {
@@ -135,7 +145,7 @@
      */
     function preloadNextUrl(nextIndex) {
       const preloader = new Image();
-      preloader.src = urls[nextIndex];
+      preloader.src = urls[nextIndex]; // Preload the next URL
     }
 
     /**
@@ -164,11 +174,11 @@
 
         // Increment round count and refresh after MAX_ROUNDS
         if (++roundCount >= MAX_ROUNDS) {
-		  console.log('about to 🔄');
+          console.log('about to 🔄');
           location.reload();
         } else {
-			console.log('about to ⏭️');
-		}
+          console.log('about to ⏭️');
+        }
 
         // Schedule the next URL load after the interval
         setTimeout(loadNextUrl, INTERVAL);
