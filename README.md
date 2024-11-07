@@ -55,7 +55,7 @@ Without the `file` query parameter, the project defaults to loading `data/live-u
 
 You can adjust the rotation interval by modifying the `INTERVAL` constant in the `startRotation` function:
 ```javascript
-const INTERVAL = 31500; // 21.5 seconds per URL
+const INTERVAL = 31500; // 31.5 seconds per URL
 ```
 
 ### Adjusting Fade Duration
