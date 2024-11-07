@@ -5,7 +5,7 @@ This project dynamically rotates through URLs in an iframe while displaying a pr
 
 ## Features
 
-- **Dynamic URL Rotation**: Displays different URLs in an iframe, rotating every 21.5 seconds.
+- **Dynamic URL Rotation**: Displays different URLs in an iframe, rotating every 31.5 seconds.
 - **Progress Bar**: Indicates the time remaining for the current URL.
 - **Splash Screen Logo**: Fades in during transitions between URLs.
 - **Dynamic JSON File Selection**: Load URLs from different JSON files by passing a query parameter.
