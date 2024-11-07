@@ -76,7 +76,7 @@
    */
   async function fetchUrls() {
     try {
-      const response = await fetch('live-urls.json'); // Fetch the JSON file
+      const response = await fetch('data/live-urls.json'); // Fetch the JSON file
       if (!response.ok) throw new Error('Failed to fetch URLs'); // Check response status
       const data = await response.json(); // Parse the JSON data
       if (!Array.isArray(data.urls) || data.urls.length === 0) {
