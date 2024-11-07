@@ -30,47 +30,14 @@
       transition: opacity 1s ease-in-out;
     }
 
-    #progressBarContainer {
+    #progressBar {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    .progressBar {
-      position: absolute;
-      background-color: #4b192d΄
-      transition: none;
-    }
-
-    #progressTop {
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 10px;
-    }
-
-    #progressRight {
-      top: 0;
-      right: 0;
-      width: 10px;
-      height: 0;
-    }
-
-    #progressBottom {
-      bottom: 0;
-      right: 0;
-      width: 0;
-      height: 10px;
-    }
-
-    #progressLeft {
       bottom: 0;
       left: 0;
-      width: 10px;
-      height: 0;
+      height: 10px;
+      width: 0;
+      background-color: #4b192d;
+      transition: width linear;
     }
   </style>
 </head>
@@ -79,12 +46,7 @@
 <div id="iframeWrapper">
   <iframe id="dynamicIframe"></iframe>
 </div>
-<div id="progressBarContainer">
-  <div id="progressTop" class="progressBar"></div>
-  <div id="progressRight" class="progressBar"></div>
-  <div id="progressBottom" class="progressBar"></div>
-  <div id="progressLeft" class="progressBar"></div>
-</div>
+<div id="progressBar"></div>
 
 <script>
   async function fetchUrls() {
@@ -106,41 +68,8 @@
     }
 
     const iframe = document.getElementById('dynamicIframe');
-    const progressBars = {
-      top: document.getElementById('progressTop'),
-      right: document.getElementById('progressRight'),
-      bottom: document.getElementById('progressBottom'),
-      left: document.getElementById('progressLeft')
-    };
-
+    const progressBar = document.getElementById('progressBar');
     let currentIndex = 0;
-
-    function resetBars() {
-      for (const bar of Object.values(progressBars)) {
-        bar.style.transition = 'none';
-        bar.style.width = '0';
-        bar.style.height = '0';
-      }
-    }
-
-    function animateBar(bar, property, value, duration, callback) {
-      bar.style.transition = `${property} ${duration}s linear`;
-      bar.style[property] = value;
-
-      setTimeout(callback, duration * 1000);
-    }
-
-    function startProgressAnimation(callback) {
-      resetBars();
-
-      animateBar(progressBars.top, 'width', '100%', 3.75, () => {
-        animateBar(progressBars.right, 'height', '100%', 3.75, () => {
-          animateBar(progressBars.bottom, 'width', '100%', 3.75, () => {
-            animateBar(progressBars.left, 'height', '100%', 3.75, callback);
-          });
-        });
-      });
-    }
 
     function loadNextUrl() {
       iframe.style.opacity = 0; // Start fade-out
@@ -151,13 +80,21 @@
           iframe.style.opacity = 1; // Fade-in after the new URL loads
         };
 
-        startProgressAnimation(() => {
-          if (currentIndex >= urls.length) {
+        progressBar.style.transition = 'none'; // Reset progress bar
+        progressBar.style.width = '0';
+        
+        setTimeout(() => {
+          progressBar.style.transition = 'width 15s linear'; // Progress for 15s
+          progressBar.style.width = '100%';
+        }, 100); // Slight delay to ensure the transition is visible
+
+        if (currentIndex >= urls.length) {
+          setTimeout(() => {
             location.reload();
-          } else {
-            loadNextUrl();
-          }
-        });
+          }, 15000);
+        } else {
+          setTimeout(loadNextUrl, 15000);
+        }
       }, 1000); // Wait for fade-out before changing the source
     }
 
